@@ -288,7 +288,10 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 @media (max-width: 600px) {
   .section { padding: 2.5rem 0; }
   .services-grid, .reviews-grid { grid-template-columns: 1fr; }
-  .mini-services { grid-template-columns: 1fr; }
+  /* 4. Services strip becomes a swipeable snap row instead of 5 tall stacked rows */
+  .mini-services { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; }
+  .mini-services > div { min-width: 168px; flex: 0 0 auto; scroll-snap-align: start; }
+  .mini-services > div + div { border-left: 1px solid var(--card-border); border-top: none; }
   .gallery-grid { grid-template-columns: 1fr; }
   .g-wide { grid-column: auto; }
   .form-row { grid-template-columns: 1fr; }
@@ -296,6 +299,13 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   .speciality-banner { padding: 1.75rem; }
   .footer-grid { grid-template-columns: 1fr; }
   .hero-trust li { border-right: none; padding-left: 0; }
+  /* 1. Hero CTAs go full-width stacked — no overflow on 320px screens */
+  .hero-cta .btn { flex: 1 1 100%; }
+  /* 2. Rating badge stays compact so it doesn't cover the hero photo */
+  .rating-badge { padding: 0.6rem 0.9rem; right: 10px; bottom: 10px; }
+  .rating-badge strong { font-size: 1.15rem; }
+  /* 3. 16px inputs stop iOS Safari auto-zooming on focus */
+  .form-group input, .form-group select, .form-group textarea { font-size: 16px; }
   .stats-band-inner { grid-template-columns: repeat(2, 1fr); }
   .stats-band-inner > div:nth-child(3) { border-left: none; }
   .stats-band-inner > div { border-top: 1px solid rgba(255, 255, 255, 0.18); }
