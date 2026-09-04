@@ -224,6 +224,7 @@ a { color: var(--navy-700); }
 
 /* ---------- Footer ---------- */
 .site-footer { background: var(--navy-900); color: #c9d9e6; }
+.areas-note { font-size: 0.9rem; color: var(--muted); margin-bottom: 1.5rem; }
 .footer-grid { display: grid; grid-template-columns: 1.3fr 1fr 1fr; gap: 2rem; padding: 3rem 0 2rem; }
 .footer-logo { font-family: var(--font-head); font-weight: 800; font-size: 1.15rem; color: #fff; margin: 0 0 0.5rem; }
 .footer-tag { font-size: 0.92rem; }

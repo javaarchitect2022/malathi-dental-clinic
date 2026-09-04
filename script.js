@@ -28,7 +28,7 @@ const CLINIC_WA_MESSAGE = "Hi, I'd like to book an appointment at Malathi Dental
 
    The backup fires silently and NEVER blocks WhatsApp — if it fails,
    the patient still books normally and you lose nothing. */
-const BACKUP_ENDPOINT = "";
+const BACKUP_ENDPOINT = "https://formsubmit.co/ajax/malathi.thandapani@gmail.com";
 
 (function () {
   "use strict";
