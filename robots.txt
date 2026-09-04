@@ -1,3 +1,3 @@
 User-agent: *
 Allow: /
-Sitemap: https://malathidental.com/sitemap.xml
+Sitemap: https://www.malathidental.com/sitemap.xml
