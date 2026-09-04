@@ -12,6 +12,24 @@ const CLINIC_PHONE_TEL = "+919900401661";
 const CLINIC_WHATSAPP = "919900401661"; // country code + number, no "+" or spaces
 const CLINIC_WA_MESSAGE = "Hi, I'd like to book an appointment at Malathi Dental Clinic";
 
+/* ---------- OPTIONAL: invisible booking backup (no server needed) ----------
+   Leave empty ("") to keep WhatsApp-only booking (current behaviour).
+   To ALSO save every booking automatically, paste ONE endpoint here:
+
+   Option A — Email backup (2 min, free, no signup):
+     1. Put "https://formsubmit.co/ajax/YOU@EXAMPLE.COM" below (your email).
+     2. Submit one test booking and click the activation mail FormSubmit sends.
+     3. Every later booking lands in your inbox AND still opens WhatsApp.
+
+   Option B — Google Sheet backup (10 min, free):
+     1. Create a Sheet with header row: timestamp,name,phone,email,service,clinic,date,time,message
+     2. Extensions → Apps Script, paste a doPost(e) that appends the JSON row, Deploy → Web app (access: Anyone).
+     3. Paste the /exec URL below.
+
+   The backup fires silently and NEVER blocks WhatsApp — if it fails,
+   the patient still books normally and you lose nothing. */
+const BACKUP_ENDPOINT = "";
+
 (function () {
   "use strict";
 
@@ -117,6 +135,24 @@ const CLINIC_WA_MESSAGE = "Hi, I'd like to book an appointment at Malathi Dental
     badge.classList.toggle("closed", !open);
   }
 
+  /* Silent backup sender — fire-and-forget, never blocks booking. */
+  function sendBackup(booking) {
+    if (!BACKUP_ENDPOINT) return;
+    try {
+      const body = JSON.stringify(booking);
+      if (navigator.sendBeacon) {
+        navigator.sendBeacon(BACKUP_ENDPOINT, new Blob([body], { type: "application/json" }));
+      } else {
+        fetch(BACKUP_ENDPOINT, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: body,
+          keepalive: true,
+        }).catch(function () { /* backup must never break booking */ });
+      }
+    } catch (err) { /* backup must never break booking */ }
+  }
+
   function initBookingForm() {
     const form = document.getElementById("booking-form");
     if (!form) return;
@@ -213,6 +249,7 @@ const CLINIC_WA_MESSAGE = "Hi, I'd like to book an appointment at Malathi Dental
       const waURL = "https://wa.me/" + CLINIC_WHATSAPP.replace(/\D/g, "") + "?text=" + encodeURIComponent(raw);
       const waFallback = document.getElementById("success-whatsapp");
       if (waFallback) waFallback.setAttribute("href", waURL);
+      sendBackup(booking); // silent copy (no-op until BACKUP_ENDPOINT is set)
       try { window.open(waURL, "_blank", "noopener"); } catch (err) { /* fallback link above covers this */ }
       success.hidden = false;
       success.scrollIntoView({ behavior: "smooth", block: "nearest" });

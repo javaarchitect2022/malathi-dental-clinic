@@ -226,7 +226,6 @@ a { color: var(--navy-700); }
 .site-footer { background: var(--navy-900); color: #c9d9e6; }
 .footer-grid { display: grid; grid-template-columns: 1.3fr 1fr 1fr; gap: 2rem; padding: 3rem 0 2rem; }
 .footer-logo { font-family: var(--font-head); font-weight: 800; font-size: 1.15rem; color: #fff; margin: 0 0 0.5rem; }
-.logo-orange { color: var(--orange); }
 .footer-tag { font-size: 0.92rem; }
 .footer-head { color: #fff; font-weight: 700; margin: 0 0 0.75rem; }
 .footer-links { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.4rem; }
