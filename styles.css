@@ -74,8 +74,8 @@ a { color: var(--navy-700); }
 .site-header { position: sticky; top: 0; z-index: 100; background: rgba(255,255,255,0.96); backdrop-filter: blur(10px); border-bottom: 1px solid var(--card-border); }
 .header-inner { min-height: var(--header-h); display: flex; align-items: center; gap: 1rem; padding: 0.6rem 0; }
 .logo { display: flex; align-items: center; gap: 0.6rem; text-decoration: none; margin-right: auto; }
-.logo-icon { width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; border: 2px solid var(--orange); color: var(--orange); background: #fff; }
-.logo-text { display: flex; flex-direction: column; line-height: 1.05; }
+.logo-img { height: 48px; width: auto; display: block; }
+.logo-fallback { display: flex; flex-direction: column; line-height: 1.05; }
 .logo-orange { font-family: var(--font-head); font-weight: 800; font-size: 1.25rem; color: var(--orange); letter-spacing: 0.02em; }
 .logo-navy { font-family: var(--font-head); font-weight: 800; font-size: 1.05rem; color: var(--navy-900); letter-spacing: 0.03em; }
 .main-nav ul { display: flex; align-items: center; gap: 0.15rem; list-style: none; margin: 0; padding: 0; }
@@ -172,10 +172,6 @@ a { color: var(--navy-700); }
 .steps strong { display: block; color: var(--orange-dark); font-size: 1rem; margin-bottom: 0.35rem; }
 .steps span { color: var(--muted); font-size: 0.9rem; }
 
-/* ---------- Popular badge ---------- */
-.service-card.popular { border: 2px solid var(--orange); position: relative; }
-.popular-tag { position: absolute; top: -13px; right: 16px; background: var(--orange); color: #fff; font-size: 0.72rem; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; border-radius: 999px; padding: 0.2rem 0.75rem; }
-
 /* ---------- Reviews ---------- */
 .reviews-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
 .review-card { padding: 1.75rem; }
@@ -226,7 +222,8 @@ a { color: var(--navy-700); }
 .site-footer { background: var(--navy-900); color: #c9d9e6; }
 .areas-note { font-size: 0.9rem; color: var(--muted); margin-bottom: 1.5rem; }
 .footer-grid { display: grid; grid-template-columns: 1.3fr 1fr 1fr; gap: 2rem; padding: 3rem 0 2rem; }
-.footer-logo { font-family: var(--font-head); font-weight: 800; font-size: 1.15rem; color: #fff; margin: 0 0 0.5rem; }
+.footer-logo { font-family: var(--font-head); font-weight: 800; font-size: 1.15rem; color: #fff; margin: 0 0 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
+.footer-logo-img { height: 36px; width: auto; filter: brightness(0) invert(1); }
 .footer-tag { font-size: 0.92rem; }
 .footer-head { color: #fff; font-weight: 700; margin: 0 0 0.75rem; }
 .footer-links { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.4rem; }
