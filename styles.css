@@ -151,6 +151,8 @@ a { color: var(--navy-700); }
 .stats-band-inner > div { text-align: center; padding: 0.6rem 1rem; }
 .stats-band-inner > div + div { border-left: 1px solid rgba(255, 255, 255, 0.18); }
 .stats-band-inner strong { display: block; font-family: var(--font-head); font-size: 1.35rem; color: #fff; }
+/* Animated figures stand out larger than the words beside them */
+.stats-band-inner strong span[data-count] { font-size: 1.7rem; font-weight: 800; }
 .stats-band-inner span { font-size: 0.82rem; color: #c9d9e6; }
 
 /* ---------- Symptom picker chips ---------- */
