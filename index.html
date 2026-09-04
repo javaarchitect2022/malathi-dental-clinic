@@ -9,6 +9,49 @@
     Phone / WhatsApp are set ONCE in script.js (top constants).
   ============================================================= -->
   <meta name="description" content="Malathi Dental Clinic — Specialised Single-Visit Root Canal Treatment in Electronic City, Basapura, Bengaluru. Call 99004 01661. Open 9:30 AM – 7:30 PM (Sunday Holiday)." />
+  <meta name="theme-color" content="#0b2f4a" />
+  <link rel="canonical" href="https://malathi-dental-clinic.vellingirid.workers.dev/" />
+  <!-- Social preview (used when the link is shared on WhatsApp / Google) -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Malathi Dental Clinic | Specialised Root Canal Treatment in Electronic City" />
+  <meta property="og:description" content="Single-Visit Root Canal Treatment in Basapura / Electronic City, Bengaluru. Call 99004 01661. Open 9:30 AM – 7:30 PM (Sunday Holiday)." />
+  <meta property="og:url" content="https://malathi-dental-clinic.vellingirid.workers.dev/" />
+  <meta name="twitter:card" content="summary" />
+  <!-- Local SEO: helps Google show phone, hours & addresses in search -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Dentist",
+    "name": "Malathi Dental Clinic",
+    "description": "Specialised Single-Visit Root Canal Treatment in Electronic City, Basapura, Bengaluru.",
+    "url": "https://malathi-dental-clinic.vellingirid.workers.dev/",
+    "telephone": "+919900401661",
+    "priceRange": "₹₹",
+    "address": [
+      { "@type": "PostalAddress", "streetAddress": "#72, 3rd Main, Maruthi Layout, Basapura, Electronic City", "addressLocality": "Bangalore", "postalCode": "560100", "addressCountry": "IN" },
+      { "@type": "PostalAddress", "streetAddress": "I ST Floor, St Gregorious Jso Church Building, 18/2, Hosa Rd, Gregorian Nagar Circle, Basapura", "addressLocality": "Bengaluru", "postalCode": "560100", "addressCountry": "IN" }
+    ],
+    "openingHoursSpecification": {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+      "opens": "09:30",
+      "closes": "19:30"
+    }
+  }
+  </script>
+  <!-- FAQ schema: helps these answers appear in Google search results -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "Is root canal treatment painful?", "acceptedAnswer": { "@type": "Answer", "text": "With modern local anaesthesia and a gentle approach, most patients report little to no pain during the procedure. The clinic focuses on comfort-first, single-visit treatment for suitable cases." } },
+      { "@type": "Question", "name": "Can my root canal finish in a single visit?", "acceptedAnswer": { "@type": "Answer", "text": "For clinically suitable cases, yes. After an X-ray and examination, Dr. Malathi will confirm whether your tooth qualifies for single-visit treatment." } },
+      { "@type": "Question", "name": "What are the clinic timings?", "acceptedAnswer": { "@type": "Answer", "text": "Open Monday to Saturday, 9:30 AM to 7:30 PM. Sunday is a holiday." } },
+      { "@type": "Question", "name": "Which clinic should I visit?", "acceptedAnswer": { "@type": "Answer", "text": "Either location — Clinic 1 (Maruthi Layout) or Clinic 2 (Hosa Road / Gregorian Nagar), Basapura, Bengaluru. Choose your preferred clinic while booking." } }
+    ]
+  }
+  </script>
   <title>Malathi Dental Clinic | Specialised Root Canal Treatment in Electronic City</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -32,6 +75,7 @@
         </a>
         <span class="topbar-sep" aria-hidden="true">|</span>
         <span>◷ 9:30 AM – 7:30 PM (Sunday Holiday)</span>
+        <span class="open-badge" id="open-badge" role="status">Checking hours…</span>
       </p>
     </div>
   </div>
@@ -86,6 +130,7 @@
             <a href="#contact" class="btn btn-primary btn-lg">📅 Book an Appointment</a>
             <a href="https://wa.me/919900401661?text=Hi%2C%20I%27d%20like%20to%20book%20an%20appointment" class="btn btn-outline btn-lg" data-whatsapp-link target="_blank" rel="noopener">💬 WhatsApp Us</a>
           </div>
+          <p class="urgent-call">Severe tooth pain? <a href="tel:+919900401661" data-call-link>Call <span data-phone-label>99004 01661</span> now</a> — same-day slots where possible.</p>
           <ul class="hero-trust" aria-label="Clinic highlights">
             <li>✓ Experienced Care</li>
             <li>✓ Patient-friendly</li>
@@ -94,9 +139,9 @@
           </ul>
         </div>
         <div class="hero-media">
-          <!-- TO SWAP WITH REAL PHOTO: replace the src below with your clinic board photo
-               (the red "MALATHI DENTAL CLINIC — Dr. T. Malathi" board from the screenshot). -->
-          <img src="https://placehold.co/640x560/c8102e/ffffff?text=MALATHI%0ADENTAL+CLINIC%0A%0ADr.+T.+Malathi+B.D.S%0ATel+%3A+99004+01661&font=poppins" alt="Malathi Dental Clinic signboard — Dr. T. Malathi, B.D.S, specialist in single visit root canal treatment, phone 99004 01661" width="640" height="560" loading="eager" fetchpriority="high" />
+          <!-- TO USE A REAL PHOTO: replace src with e.g. "images/signboard-photo.jpg".
+               Keep the same width/height attributes to avoid layout shift. -->
+          <img src="images/hero-board.svg" alt="Malathi Dental Clinic signboard — Dr. T. Malathi, B.D.S, specialist in single visit root canal treatment, phone 99004 01661" width="640" height="560" loading="eager" fetchpriority="high" />
           <div class="rating-badge" aria-label="Rated 4.9 out of 5 from Google patient reviews">
             <strong>4.9 ★★★★★</strong><span>Google patient reviews</span>
           </div>
@@ -115,14 +160,40 @@
       </div>
     </section>
 
+    <!-- ==================== TRUST BAND (key facts at a glance) ==================== -->
+    <section class="stats-band" aria-label="Clinic facts">
+      <div class="container stats-band-inner">
+        <div><strong><span data-count="4.9" data-decimals="1">4.9</span> ★</strong><span>Google patient rating</span></div>
+        <div><strong>Single-Visit</strong><span>Root canal speciality</span></div>
+        <div><strong><span data-count="2">2</span> Clinics</strong><span>Maruthi Layout &amp; Hosa Road</span></div>
+        <div><strong><span data-count="6">6</span> Days Open</strong><span>Mon–Sat · Sunday holiday</span></div>
+      </div>
+    </section>
+
+    <!-- ==================== SYMPTOM PICKER (tap → pre-fills booking form) ==================== -->
+    <section class="section section-tight" id="help" aria-labelledby="help-title">
+      <div class="container">
+        <h2 id="help-title" class="center">How can we help you today?</h2>
+        <p class="section-sub center">Tap an option — we'll pre-fill it in the booking form for you.</p>
+        <div class="chip-row" role="list">
+          <a role="listitem" class="chip" href="#contact" data-treatment="Single-Visit Root Canal Treatment">🦷 Tooth Pain</a>
+          <a role="listitem" class="chip" href="#contact" data-treatment="Dental Consultation & Check-up">🩺 Regular Check-up</a>
+          <a role="listitem" class="chip" href="#contact" data-treatment="Teeth Cleaning">✨ Cleaning</a>
+          <a role="listitem" class="chip" href="#contact" data-treatment="Crowns & Bridges">🛡️ Crown / Bridge</a>
+          <a role="listitem" class="chip" href="#contact" data-treatment="Children's Dental Care">🧒 Kids Dentistry</a>
+          <a role="listitem" class="chip" href="#contact" data-treatment="Other / Not sure">💬 Something Else</a>
+        </div>
+      </div>
+    </section>
+
     <!-- ==================== ABOUT: Doctor + Why choose us ==================== -->
     <section class="section" id="about" aria-labelledby="about-title">
       <div class="container about-grid">
         <article class="card cream-card" aria-labelledby="about-title">
           <h2 id="about-title">Meet Dr. T. Malathi <span class="degree">B.D.S.</span></h2>
           <div class="doctor-row">
-            <!-- TO SWAP: replace with real clinic interior / doctor photo -->
-            <img src="https://placehold.co/220x280/e8eef4/0b2f4a?text=Clinic+Interior&font=poppins" alt="Treatment room inside Malathi Dental Clinic" width="220" height="280" loading="lazy" />
+            <!-- TO USE A REAL PHOTO: replace src with e.g. "images/doctor.jpg". -->
+            <img src="images/interior.svg" alt="Treatment room inside Malathi Dental Clinic" width="220" height="280" loading="lazy" />
             <ul class="tick-list">
               <li>Specialised in Root Canal Treatment</li>
               <li>Focus on Single-Visit RCT</li>
@@ -162,6 +233,20 @@
       </div>
     </section>
 
+    <!-- ==================== RCT JOURNEY (what to expect) ==================== -->
+    <section class="section section-tight" id="journey" aria-labelledby="journey-title">
+      <div class="container">
+        <h2 id="journey-title" class="center">Your root canal journey, step by step</h2>
+        <p class="section-sub center">Know exactly what happens — no surprises, no rushed decisions.</p>
+        <ol class="steps">
+          <li><strong>1 · Examine</strong><span>Consultation + X-ray to confirm whether RCT can save your tooth.</span></li>
+          <li><strong>2 · Plan</strong><span>Written treatment plan with a clear estimate before we begin.</span></li>
+          <li><strong>3 · Treat</strong><span>Gentle single-visit RCT for suitable cases, comfort first.</span></li>
+          <li><strong>4 · Protect</strong><span>Crown if needed + review, so the tooth lasts for years.</span></li>
+        </ol>
+      </div>
+    </section>
+
     <!-- ==================== SERVICES ==================== -->
     <section class="section" id="services" aria-labelledby="services-title">
       <div class="container">
@@ -169,7 +254,7 @@
         <p class="section-sub center">Essential dental care for individuals and families, with a special focus on Root Canal Treatment.</p>
         <div class="services-grid">
           <article class="card service-card"><div class="icon-badge" aria-hidden="true">🧡</div><h3>Dental Consultation &amp; Check-up</h3><p>Careful examination, diagnosis and a clear, personalised treatment plan.</p></article>
-          <article class="card service-card"><div class="icon-badge" aria-hidden="true">✨</div><h3>Single-Visit Root Canal</h3><p>Our speciality — save your natural tooth in a single visit where suitable.</p></article>
+          <article class="card service-card popular"><span class="popular-tag" aria-hidden="true">Most popular</span><div class="icon-badge" aria-hidden="true">✨</div><h3>Single-Visit Root Canal</h3><p>Our speciality — save your natural tooth in a single visit where suitable.</p></article>
           <article class="card service-card"><div class="icon-badge" aria-hidden="true">✨</div><h3>Dental Fillings</h3><p>Tooth-coloured fillings to repair decay comfortably and safely.</p></article>
           <article class="card service-card"><div class="icon-badge" aria-hidden="true">🦷</div><h3>Teeth Cleaning</h3><p>Scaling and polishing for healthy gums and fresh breath.</p></article>
           <article class="card service-card"><div class="icon-badge" aria-hidden="true">🛡️</div><h3>Crowns &amp; Bridges</h3><p>Strong, natural-looking restorations for damaged or missing teeth.</p></article>
@@ -187,12 +272,12 @@
         <h2 id="gallery-title" class="center">Our Clinic</h2>
         <p class="section-sub center">A clean, welcoming environment for comfortable dental care.</p>
         <div class="gallery-grid">
-          <!-- TO SWAP: replace these 4 placeholders with real photos:
-               1) red signboard, 2) yellow name board, 3) street/building view, 4) treatment room -->
-          <img class="g-tall" src="https://placehold.co/520x560/c8102e/ffffff?text=Clinic+Signboard&font=poppins" alt="Malathi Dental Clinic red signboard" loading="lazy" width="520" height="560" />
-          <img src="https://placehold.co/520x270/f5a623/0b2f4a?text=Name+Board+%2B+Timings&font=poppins" alt="Malathi Dental Clinic name board with phone number and timings" loading="lazy" width="520" height="270" />
-          <img src="https://placehold.co/520x270/d9e8f2/0b2f4a?text=Clinic+Building&font=poppins" alt="Street view of the Malathi Dental Clinic building" loading="lazy" width="520" height="270" />
-          <img class="g-wide" src="https://placehold.co/1060x300/e8eef4/0b2f4a?text=Treatment+Room&font=poppins" alt="Dental chair and treatment room at Malathi Dental Clinic" loading="lazy" width="1060" height="300" />
+          <!-- TO USE REAL PHOTOS: replace each src with e.g. "images/clinic-1.jpg".
+               Keep the same width/height attributes to avoid layout shift. -->
+          <img class="g-tall" src="images/gallery-signboard.svg" alt="Malathi Dental Clinic red signboard" loading="lazy" width="520" height="560" />
+          <img src="images/gallery-nameboard.svg" alt="Malathi Dental Clinic name board with phone number and timings" loading="lazy" width="520" height="270" />
+          <img src="images/gallery-building.svg" alt="Street view of the Malathi Dental Clinic building" loading="lazy" width="520" height="270" />
+          <img class="g-wide" src="images/gallery-treatment.svg" alt="Dental chair and treatment room at Malathi Dental Clinic" loading="lazy" width="1060" height="300" />
         </div>
       </div>
     </section>
@@ -204,22 +289,59 @@
         <p class="section-sub center">We will feature verified Google reviews here rather than placeholder testimonials.</p>
         <div class="reviews-grid">
           <article class="card review-card">
-            <div class="stars" aria-label="5 star rating">★★★★★</div>
+            <div class="stars" role="img" aria-label="Rated 5 out of 5 stars">★★★★★</div>
+            <span class="avatar" aria-hidden="true">G</span>
             <h3>Google Reviews</h3>
             <p>Real patient reviews will be connected here once the clinic's Google Business Profile is confirmed.</p>
           </article>
           <article class="card review-card">
-            <div class="stars" aria-label="5 star rating">★★★★★</div>
+            <div class="stars" role="img" aria-label="Rated 5 out of 5 stars">★★★★★</div>
+            <span class="avatar" aria-hidden="true">P</span>
             <h3>Patient-first care</h3>
             <p>We want the website to reflect genuine patient experiences and the clinic's real strengths.</p>
           </article>
           <article class="card review-card">
-            <div class="stars" aria-label="5 star rating">★★★★★</div>
+            <div class="stars" role="img" aria-label="Rated 5 out of 5 stars">★★★★★</div>
+            <span class="avatar" aria-hidden="true">R</span>
             <h3>Single-Visit RCT</h3>
             <p>Questions and feedback about root canal treatment can be highlighted with verified reviews.</p>
           </article>
         </div>
         <!-- TO ADD REAL REVIEWS: paste verified Google review text into the cards above. -->
+        <p class="center review-cta"><a class="btn btn-outline" href="https://www.google.com/maps/search/?api=1&query=Malathi+Dental+Clinic+Basapura+Bengaluru" target="_blank" rel="noopener">★ Review us on Google</a></p>
+        <!-- TO LINK DIRECTLY: replace the href above with your Google Business review link once confirmed. -->
+      </div>
+    </section>
+
+    <!-- ==================== FAQ ==================== -->
+    <section class="section section-alt" id="faq" aria-labelledby="faq-title">
+      <div class="container faq-wrap">
+        <h2 id="faq-title" class="center">Frequently asked questions</h2>
+        <p class="section-sub center">Straight answers about root canals, visits and timings.</p>
+        <details class="faq" open>
+          <summary>Is root canal treatment painful?</summary>
+          <p>With modern local anaesthesia and a gentle, unhurried approach, most patients feel little to no pain during the procedure — many say it feels like getting a filling.</p>
+        </details>
+        <details class="faq">
+          <summary>Can my root canal finish in a single visit?</summary>
+          <p>For clinically suitable cases, yes. After an X-ray and examination, Dr. Malathi will confirm whether your tooth qualifies — the focus is always on doing what's right for the tooth, not rushing.</p>
+        </details>
+        <details class="faq">
+          <summary>How much will my treatment cost?</summary>
+          <p>It depends on the tooth and what's needed. You'll always get a written estimate after examination, before treatment begins. Call or WhatsApp <a href="tel:+919900401661" data-call-link><span data-phone-label>99004 01661</span></a> for guidance.</p>
+        </details>
+        <details class="faq">
+          <summary>Will I need a crown after the root canal?</summary>
+          <p>Often, yes — a crown protects a root-canal-treated tooth and helps it last for years. Your plan will spell this out clearly upfront.</p>
+        </details>
+        <details class="faq">
+          <summary>Which clinic should I visit?</summary>
+          <p>Whichever is closer — Clinic 1 (Maruthi Layout) or Clinic 2 (Hosa Road / Gregorian Nagar). Just pick your preference in the booking form.</p>
+        </details>
+        <details class="faq">
+          <summary>Are you open on Sundays?</summary>
+          <p>No — Sunday is a holiday. We're open Monday to Saturday, 9:30 AM to 7:30 PM. For Sunday tooth emergencies, WhatsApp us and we'll guide you.</p>
+        </details>
       </div>
     </section>
 
@@ -332,6 +454,7 @@
             <div class="success-icon" aria-hidden="true">✓</div>
             <h4>Thank you, <span id="success-name">friend</span>!</h4>
             <p>Your request for <strong id="success-slot">your slot</strong> has been received. The clinic will call / WhatsApp you to confirm.</p>
+            <p class="success-wa-wrap"><a href="#" id="success-whatsapp" class="btn btn-whatsapp btn-sm" target="_blank" rel="noopener">Confirm faster on WhatsApp ↗</a></p>
             <button type="button" class="btn btn-outline btn-sm" id="form-reset">Book another appointment</button>
           </div>
         </form>
@@ -346,10 +469,11 @@
         <p class="footer-logo"><span class="logo-orange">MALATHI</span> DENTAL CLINIC</p>
         <p class="footer-tag">Specialised Single-Visit Root Canal Treatment in Electronic City, Basapura.</p>
         <div class="social-row">
-          <a href="#" aria-label="Clinic on Instagram" class="social-btn"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg></a>
-          <a href="#" aria-label="Clinic on Facebook" class="social-btn"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
-          <a href="#" aria-label="Clinic on Google Maps" class="social-btn"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></a>
+          <a href="https://www.google.com/maps/search/?api=1&query=Malathi+Dental+Clinic+Maruthi+Layout+Basapura+Bengaluru" target="_blank" rel="noopener" aria-label="Malathi Dental Clinic on Google Maps" class="social-btn"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></a>
+          <a href="tel:+919900401661" data-call-link aria-label="Call Malathi Dental Clinic" class="social-btn"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg></a>
+          <a href="https://wa.me/919900401661?text=Hi%2C%20I%27d%20like%20to%20book%20an%20appointment" data-whatsapp-link target="_blank" rel="noopener" aria-label="Chat with Malathi Dental Clinic on WhatsApp" class="social-btn"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2z"/></svg></a>
         </div>
+        <!-- When real Instagram/Facebook pages exist, add them here. -->
       </div>
       <nav aria-label="Footer quick links">
         <p class="footer-head">Quick Links</p>
@@ -359,6 +483,7 @@
           <li><a href="#root-canal">Root Canal</a></li>
           <li><a href="#gallery">Gallery</a></li>
           <li><a href="#reviews">Reviews</a></li>
+          <li><a href="#faq">FAQs</a></li>
           <li><a href="#contact">Contact</a></li>
         </ul>
       </nav>
@@ -376,6 +501,15 @@
       </div>
     </div>
   </footer>
+
+  <!-- ============ STICKY MOBILE ACTION BAR ============ -->
+  <!-- Clove-style: always-reachable Call / WhatsApp / Book on phones.
+       Auto-hides while the booking form is on screen (see script.js). -->
+  <nav class="mobile-bar" id="mobile-bar" aria-label="Quick actions">
+    <a href="tel:+919900401661" data-call-link>📞 <span>Call</span></a>
+    <a href="https://wa.me/919900401661?text=Hi%2C%20I%27d%20like%20to%20book%20an%20appointment" data-whatsapp-link target="_blank" rel="noopener">💬 <span>WhatsApp</span></a>
+    <a href="#contact" class="primary">📅 <span>Book Visit</span></a>
+  </nav>
 
   <!-- ============ FLOATING CALL + WHATSAPP BUTTONS ============ -->
   <div class="fab-stack" id="fab-stack" aria-label="Quick contact buttons">
@@ -399,9 +533,10 @@ CUSTOMIZATION GUIDE — Malathi Dental Clinic
 2. TIMINGS: topbar + contact section ("9:30 AM – 7:30 PM,
    Sunday Holiday").
 3. ADDRESSES + Get Directions links: <section id="contact">.
-4. PHOTOS: search for "placehold.co" — hero board, doctor/
-   interior, 4 gallery images. Replace src with real files,
-   e.g. src="images/signboard.jpg" (keep alt text).
+4. PHOTOS: the site now uses local branded graphics in images/ (no
+   external dependency, works offline). To use real photos, replace each
+   <img src="images/..."> with your JPG, e.g. src="images/signboard.jpg"
+   (keep width/height + alt text to avoid layout shift).
 5. REVIEWS: <section id="reviews"> — paste verified Google
    review text into the 3 cards.
 6. BACKEND: script.js → handleBookingSubmit() — "CONNECT

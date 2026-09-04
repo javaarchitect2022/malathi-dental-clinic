@@ -37,16 +37,21 @@ const CLINIC_WA_MESSAGE = "Hi, I'd like to book an appointment at Malathi Dental
     const toggle = document.getElementById("nav-toggle");
     const nav = document.getElementById("main-nav");
     if (!toggle || !nav) return;
-    toggle.addEventListener("click", () => {
-      const open = nav.classList.toggle("open");
+    function setOpen(open) {
+      nav.classList.toggle("open", open);
       toggle.setAttribute("aria-expanded", String(open));
       toggle.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+    }
+    toggle.addEventListener("click", () => setOpen(!nav.classList.contains("open")));
+    // Close on Escape for keyboard users
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && nav.classList.contains("open")) {
+        setOpen(false);
+        toggle.focus();
+      }
     });
     nav.querySelectorAll("a").forEach((link) => {
-      link.addEventListener("click", () => {
-        nav.classList.remove("open");
-        toggle.setAttribute("aria-expanded", "false");
-      });
+      link.addEventListener("click", () => setOpen(false));
     });
   }
 
@@ -70,7 +75,7 @@ const CLINIC_WA_MESSAGE = "Hi, I'd like to book an appointment at Malathi Dental
 
   /* ---------- 4. Reveal on scroll ---------- */
   function initReveal() {
-    const els = document.querySelectorAll(".service-card, .review-card, .cream-card, .blue-card, .form-card, .speciality-banner");
+    const els = document.querySelectorAll(".service-card, .review-card, .cream-card, .blue-card, .form-card, .speciality-banner, .chip, .steps li, .faq, .stats-band-inner > div");
     els.forEach((el) => el.classList.add("reveal"));
     if (!("IntersectionObserver" in window)) { els.forEach((el) => el.classList.add("in")); return; }
     const io = new IntersectionObserver((entries) => {
@@ -85,6 +90,31 @@ const CLINIC_WA_MESSAGE = "Hi, I'd like to book an appointment at Malathi Dental
     const err = group ? group.querySelector(".error") : null;
     if (err) err.textContent = message || "";
     if (group) group.classList.toggle("invalid", Boolean(message));
+    if (message) input.setAttribute("aria-invalid", "true");
+    else input.removeAttribute("aria-invalid");
+  }
+
+  // Local (device) date as YYYY-MM-DD — unlike toISOString() this does
+  // not shift the day for IST (+05:30) near midnight.
+  function localISODate(d) {
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    return y + "-" + m + "-" + day;
+  }
+
+  /* Clinic hours: Mon–Sat 9:30 AM – 7:30 PM, Sunday closed.
+     Drives the "Open now / Closed" badge in the topbar. */
+  function initOpenBadge() {
+    const badge = document.getElementById("open-badge");
+    if (!badge) return;
+    const now = new Date();
+    const day = now.getDay(); // 0 = Sunday
+    const mins = now.getHours() * 60 + now.getMinutes();
+    const open = day !== 0 && mins >= 9 * 60 + 30 && mins < 19 * 60 + 30;
+    badge.textContent = open ? "● Open now" : "○ Closed · opens 9:30 AM (Mon–Sat)";
+    badge.classList.toggle("open", open);
+    badge.classList.toggle("closed", !open);
   }
 
   function initBookingForm() {
@@ -99,8 +129,8 @@ const CLINIC_WA_MESSAGE = "Hi, I'd like to book an appointment at Malathi Dental
     const time = document.getElementById("f-time");
     const success = document.getElementById("form-success");
 
-    // No Sunday bookings (Sunday Holiday) + no past dates
-    const isoToday = new Date().toISOString().split("T")[0];
+    // No Sunday bookings (Sunday Holiday) + no past dates (local date!)
+    const isoToday = localISODate(new Date());
     date.setAttribute("min", isoToday);
 
     [name, phone, email, service, clinic, date, time].forEach((input) => {
@@ -160,7 +190,7 @@ const CLINIC_WA_MESSAGE = "Hi, I'd like to book an appointment at Malathi Dental
            );
            window.open(`https://wa.me/${CLINIC_WHATSAPP}?text=${text}`, "_blank");
          ====================================================== */
-      console.log("New appointment request (connect backend here):", booking);
+      // Booking confirmed client-side (no backend yet — see note below).
       handleBookingSubmit(booking);
     });
 
@@ -168,16 +198,34 @@ const CLINIC_WA_MESSAGE = "Hi, I'd like to book an appointment at Malathi Dental
       document.getElementById("success-name").textContent = booking.name.split(" ")[0] || "friend";
       document.getElementById("success-slot").textContent =
         booking.service + " @ " + booking.clinic + " on " + booking.date + " · " + booking.time;
+      // One-tap WhatsApp confirmation: patient just hits send, clinic gets
+      // all details even before any backend exists.
+      const waBtn = document.getElementById("success-whatsapp");
+      if (waBtn) {
+        const raw =
+          "Hi Malathi Dental Clinic! I'd like to confirm my appointment:\n" +
+          "Name: " + booking.name +
+          "\nPhone: " + booking.phone +
+          "\nTreatment: " + booking.service +
+          "\nClinic: " + booking.clinic +
+          "\nPreferred: " + booking.date + " (" + booking.time + ")" +
+          (booking.message ? "\nNote: " + booking.message : "");
+        waBtn.setAttribute("href", "https://wa.me/" + CLINIC_WHATSAPP.replace(/\D/g, "") + "?text=" + encodeURIComponent(raw));
+      }
       success.hidden = false;
       success.scrollIntoView({ behavior: "smooth", block: "nearest" });
-      form.querySelector('button[type="submit"]').textContent = "Request Sent ✓";
+      const submitBtn = form.querySelector('button[type="submit"]');
+      submitBtn.textContent = "Request Sent ✓";
+      submitBtn.disabled = true; // prevent accidental double-booking
     }
 
     const resetBtn = document.getElementById("form-reset");
     if (resetBtn) resetBtn.addEventListener("click", () => {
       form.reset();
       success.hidden = true;
-      form.querySelector('button[type="submit"]').textContent = "Request Appointment";
+      const submitBtn = form.querySelector('button[type="submit"]');
+      submitBtn.textContent = "Request Appointment";
+      submitBtn.disabled = false;
       name.focus();
     });
   }
@@ -187,6 +235,58 @@ const CLINIC_WA_MESSAGE = "Hi, I'd like to book an appointment at Malathi Dental
     if (y) y.textContent = String(new Date().getFullYear());
   }
 
+  /* ---------- 6. Animated trust-band counters (honest figures only) ---------- */
+  function initCounters() {
+    const els = document.querySelectorAll("[data-count]");
+    if (!els.length) return;
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const animate = (el) => {
+      const target = parseFloat(el.dataset.count);
+      const decimals = parseInt(el.dataset.decimals || "0", 10);
+      if (reduced || !isFinite(target)) { el.textContent = target.toFixed(decimals); return; }
+      const dur = 1200;
+      const t0 = performance.now();
+      const tick = (t) => {
+        const p = Math.min((t - t0) / dur, 1);
+        const eased = 1 - Math.pow(1 - p, 3);
+        el.textContent = (target * eased).toFixed(decimals);
+        if (p < 1) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    };
+    if (!("IntersectionObserver" in window)) { els.forEach(animate); return; }
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => { if (e.isIntersecting) { animate(e.target); io.unobserve(e.target); } });
+    }, { threshold: 0.4 });
+    els.forEach((el) => io.observe(el));
+  }
+
+  /* ---------- 7. Symptom chips → pre-fill treatment in booking form ---------- */
+  function initChips() {
+    const select = document.getElementById("f-service");
+    if (!select) return;
+    document.querySelectorAll(".chip[data-treatment]").forEach((chip) => {
+      chip.addEventListener("click", () => {
+        const want = chip.dataset.treatment;
+        Array.from(select.options).forEach((o) => {
+          if (o.text.trim() === want) select.selectedIndex = o.index;
+        });
+        setError(select, "");
+      });
+    });
+  }
+
+  /* ---------- 8. Sticky mobile bar: hide while booking form is visible ---------- */
+  function initMobileBar() {
+    const bar = document.getElementById("mobile-bar");
+    const contact = document.getElementById("contact");
+    if (!bar || !contact || !("IntersectionObserver" in window)) return;
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => bar.classList.toggle("hidden", e.isIntersecting));
+    }, { threshold: 0.08 });
+    io.observe(contact);
+  }
+
   document.addEventListener("DOMContentLoaded", () => {
     applyContactLinks();
     initNav();
@@ -194,5 +294,9 @@ const CLINIC_WA_MESSAGE = "Hi, I'd like to book an appointment at Malathi Dental
     initReveal();
     initBookingForm();
     initYear();
+    initOpenBadge();
+    initCounters();
+    initChips();
+    initMobileBar();
   });
 })();

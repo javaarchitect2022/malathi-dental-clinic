@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="560" viewBox="0 0 640 560" role="img" aria-label="Malathi Dental Clinic signboard">
+  <rect width="640" height="560" rx="24" fill="#c8102e"/>
+  <rect x="24" y="24" width="592" height="512" rx="16" fill="none" stroke="#ffffff" stroke-width="3" opacity="0.5"/>
+  <circle cx="320" cy="130" r="72" fill="#0b2f4a"/>
+  <path d="M320 78c-32 0-50 22-50 50 0 20 10 30 17 47 4 11 7 30 17 30 12 0 7-27 16-27s4 27 16 27c10 0 13-19 17-30 7-17 17-27 17-47 0-28-18-50-50-50z" fill="#ffffff"/>
+  <circle cx="303" cy="122" r="5" fill="#0b2f4a"/><circle cx="337" cy="122" r="5" fill="#0b2f4a"/>
+  <path d="M305 142q15 14 30 0" stroke="#0b2f4a" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <text x="320" y="260" text-anchor="middle" font-family="Poppins, Arial, sans-serif" font-weight="800" font-size="58" fill="#ffffff">MALATHI</text>
+  <text x="320" y="310" text-anchor="middle" font-family="Poppins, Arial, sans-serif" font-weight="700" font-size="34" fill="#ffffff">DENTAL CLINIC</text>
+  <text x="320" y="360" text-anchor="middle" font-family="Poppins, Arial, sans-serif" font-weight="700" font-size="30" fill="#7fd4ff">Dr. T. Malathi <tspan font-size="20">B.D.S</tspan></text>
+  <text x="320" y="402" text-anchor="middle" font-family="Poppins, Arial, sans-serif" font-size="22" fill="#ffe08a">Single-Visit Root Canal Treatment</text>
+  <text x="320" y="462" text-anchor="middle" font-family="Poppins, Arial, sans-serif" font-weight="800" font-size="40" fill="#ffffff">Tel : 99004 01661</text>
+  <text x="320" y="500" text-anchor="middle" font-family="Poppins, Arial, sans-serif" font-size="20" fill="#ffffff" opacity="0.9">9:30 AM – 7:30 PM (Sunday Holiday)</text>
+</svg>
