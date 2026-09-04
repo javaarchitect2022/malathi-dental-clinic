@@ -89,6 +89,20 @@ a { color: var(--navy-700); }
 /* ---------- Hero ---------- */
 .hero { background: linear-gradient(180deg, #f2f6fa 0%, var(--bg) 100%); padding: 3rem 0 2rem; }
 .hero-grid { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 2.5rem; align-items: center; }
+/* Banner hero: full-width banner image with overlapping headline card */
+.hero-banner-card { border-radius: 28px; overflow: hidden; border: 4px solid #fff; box-shadow: var(--shadow-lg); background: #fff; }
+.hero-banner-card img { width: 100%; height: auto; display: block; aspect-ratio: 3 / 1; object-fit: cover; object-position: center; }
+.hero-content-card { position: relative; z-index: 2; background: #fff; border: 1px solid var(--card-border); border-radius: 24px; box-shadow: var(--shadow-lg); padding: 1.75rem 2rem 1.25rem; margin: 1.5rem 3rem 0; display: grid; grid-template-columns: 1.25fr 0.75fr; grid-template-areas: "copy cta" "trust trust"; gap: 1rem 2rem; align-items: center; }
+.hero-content-card h1 { font-size: clamp(1.5rem, 2.8vw, 2.1rem); margin-bottom: 0.4rem; }
+.hero-content-card .lead { font-size: 1rem; margin-bottom: 0.75rem; }
+.hero-content-card .urgent-call { margin-bottom: 0; }
+.hero-content-card > div:first-child { grid-area: copy; }
+.hero-cta-col { grid-area: cta; }
+/* Trust ticks: full-width bottom row inside the card — no orphan wrap, no dead space */
+.hero-trust-row { grid-area: trust; margin: 0; padding-top: 0.9rem; border-top: 1px solid var(--card-border); }
+.hero-trust-row li:last-child { border-right: none; }
+.hero-cta-col { display: flex; flex-direction: column; gap: 0.8rem; }
+.hero-cta-col .btn { width: 100%; }
 .eyebrow { font-size: 0.82rem; font-weight: 800; letter-spacing: 0.14em; color: var(--orange-dark); margin: 0 0 0.6rem; }
 .hl-orange { color: var(--orange); }
 .pill { display: inline-block; background: var(--blue-soft); color: var(--navy-900); font-weight: 700; border-radius: 999px; padding: 0.45rem 1.1rem; margin: 0.75rem 0; font-size: 0.95rem; }
@@ -264,6 +278,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 /* ---------- Responsive ---------- */
 @media (max-width: 960px) {
   .hero-grid, .about-grid, .contact-grid, .speciality-banner { grid-template-columns: 1fr; }
+  .hero-content-card { grid-template-columns: 1fr; grid-template-areas: "copy" "cta" "trust"; margin: 1.25rem 1.25rem 0; padding: 1.5rem; }
   .services-grid, .reviews-grid { grid-template-columns: repeat(2, 1fr); }
   .steps { grid-template-columns: repeat(2, 1fr); }
   .mini-services { grid-template-columns: repeat(2, 1fr); }
@@ -305,6 +320,9 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   .hero-trust li { border-right: none; padding-left: 0; }
   /* 1. Hero CTAs go full-width stacked — no overflow on 320px screens */
   .hero-cta .btn { flex: 1 1 100%; }
+  .hero-banner-card { border-radius: 20px; }
+  .hero-banner-card img { aspect-ratio: 16 / 10; object-position: 70% center; }
+  .hero-content-card { margin: 1rem 0.75rem 0; padding: 1.25rem; }
   /* 2. Rating badge stays compact so it doesn't cover the hero photo */
   .rating-badge { padding: 0.6rem 0.9rem; right: 10px; bottom: 10px; }
   .rating-badge strong { font-size: 1.15rem; }
