@@ -194,8 +194,7 @@
         <article class="card cream-card" aria-labelledby="about-title">
           <h2 id="about-title">Meet Dr. T. Malathi <span class="degree">B.D.S.</span></h2>
           <div class="doctor-row">
-            <!-- TO USE A REAL PHOTO: replace src with e.g. "images/doctor.jpg". -->
-            <img src="images/interior.svg" alt="Treatment room inside Malathi Dental Clinic" width="220" height="280" loading="lazy" />
+            <img class="doctor-thumb" src="images/doctor.jpg" onerror="this.onerror=null;this.src='images/interior.svg'" alt="Dr. T. Malathi, B.D.S" width="340" height="440" loading="lazy" />
             <ul class="tick-list">
               <li>Specialised in Root Canal Treatment</li>
               <li>Focus on Single-Visit RCT</li>
@@ -274,12 +273,11 @@
         <h2 id="gallery-title" class="center">Our Clinic</h2>
         <p class="section-sub center">A clean, welcoming environment for comfortable dental care.</p>
         <div class="gallery-grid">
-          <!-- TO USE REAL PHOTOS: replace each src with e.g. "images/clinic-1.jpg".
-               Keep the same width/height attributes to avoid layout shift. -->
-          <img class="g-tall" src="images/gallery-signboard.svg" alt="Malathi Dental Clinic red signboard" loading="lazy" width="520" height="560" />
-          <img src="images/gallery-nameboard.svg" alt="Malathi Dental Clinic name board with phone number and timings" loading="lazy" width="520" height="270" />
-          <img src="images/gallery-building.svg" alt="Street view of the Malathi Dental Clinic building" loading="lazy" width="520" height="270" />
-          <img class="g-wide" src="images/gallery-treatment.svg" alt="Dental chair and treatment room at Malathi Dental Clinic" loading="lazy" width="1060" height="300" />
+          <!-- REAL PHOTOS (3): images/clinic-nameboard.jpg, clinic-building.jpg,
+               clinic-treatment.jpg. Each has an SVG fallback. -->
+          <img src="images/clinic-nameboard.jpg" onerror="this.onerror=null;this.src='images/gallery-nameboard.svg'" alt="Malathi Dental Clinic name board with phone number and timings" loading="lazy" width="800" height="600" />
+          <img src="images/clinic-building.jpg" onerror="this.onerror=null;this.src='images/gallery-building.svg'" alt="Street view near Malathi Dental Clinic, Basapura" loading="lazy" width="800" height="600" />
+          <img src="images/clinic-treatment.jpg" onerror="this.onerror=null;this.src='images/gallery-treatment.svg'" alt="Dental chair and treatment room at Malathi Dental Clinic" loading="lazy" width="800" height="600" />
         </div>
       </div>
     </section>
@@ -355,7 +353,7 @@
             <div>
               <h3>Clinic 1 — Maruthi Layout</h3>
               <p>#72, 3rd Main, Maruthi Layout, Basapura, Electronic City,<br />Bangalore – 560100
-                <a class="dir-link" href="https://www.google.com/maps/search/?api=1&query=72+3rd+Main+Maruthi+Layout+Basapura+Electronic+City+Bangalore+560100" target="_blank" rel="noopener">Get Directions ↗</a>
+                <a class="dir-link" href="https://maps.app.goo.gl/bAeRicWusXkCPvhN8?g_st=aw" target="_blank" rel="noopener">Get Directions ↗</a>
               </p>
             </div>
           </div>
@@ -452,7 +450,7 @@
             <div class="success-icon" aria-hidden="true">✓</div>
             <h4>Thank you, <span id="success-name">friend</span>!</h4>
             <p>Your request for <strong id="success-slot">your slot</strong> has been received. The clinic will call / WhatsApp you to confirm.</p>
-            <p class="success-wa-wrap"><a href="#" id="success-whatsapp" class="btn btn-whatsapp btn-sm" target="_blank" rel="noopener">Confirm faster on WhatsApp ↗</a></p>
+            <p class="success-wa-fallback">WhatsApp didn't open? <a id="success-whatsapp" href="#" target="_blank" rel="noopener">Tap here to send it</a></p>
             <button type="button" class="btn btn-outline btn-sm" id="form-reset">Book another appointment</button>
           </div>
         </form>

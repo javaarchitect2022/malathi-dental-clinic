@@ -198,20 +198,22 @@ const CLINIC_WA_MESSAGE = "Hi, I'd like to book an appointment at Malathi Dental
       document.getElementById("success-name").textContent = booking.name.split(" ")[0] || "friend";
       document.getElementById("success-slot").textContent =
         booking.service + " @ " + booking.clinic + " on " + booking.date + " · " + booking.time;
-      // One-tap WhatsApp confirmation: patient just hits send, clinic gets
-      // all details even before any backend exists.
-      const waBtn = document.getElementById("success-whatsapp");
-      if (waBtn) {
-        const raw =
-          "Hi Malathi Dental Clinic! I'd like to confirm my appointment:\n" +
-          "Name: " + booking.name +
-          "\nPhone: " + booking.phone +
-          "\nTreatment: " + booking.service +
-          "\nClinic: " + booking.clinic +
-          "\nPreferred: " + booking.date + " (" + booking.time + ")" +
-          (booking.message ? "\nNote: " + booking.message : "");
-        waBtn.setAttribute("href", "https://wa.me/" + CLINIC_WHATSAPP.replace(/\D/g, "") + "?text=" + encodeURIComponent(raw));
-      }
+      // Direct send: open the clinic's WhatsApp with the full booking
+      // pre-filled — the patient just hits send. Runs in the submit
+      // (user-gesture) handler so popup blockers allow it.
+      const raw =
+        "Hi Malathi Dental Clinic! I'd like to confirm my appointment:\n" +
+        "Name: " + booking.name +
+        "\nPhone: " + booking.phone +
+        "\nTreatment: " + booking.service +
+        "\nClinic: " + booking.clinic +
+        "\nPreferred: " + booking.date + " (" + booking.time + ")" +
+        (booking.email ? "\nEmail: " + booking.email : "") +
+        (booking.message ? "\nNote: " + booking.message : "");
+      const waURL = "https://wa.me/" + CLINIC_WHATSAPP.replace(/\D/g, "") + "?text=" + encodeURIComponent(raw);
+      const waFallback = document.getElementById("success-whatsapp");
+      if (waFallback) waFallback.setAttribute("href", waURL);
+      try { window.open(waURL, "_blank", "noopener"); } catch (err) { /* fallback link above covers this */ }
       success.hidden = false;
       success.scrollIntoView({ behavior: "smooth", block: "nearest" });
       const submitBtn = form.querySelector('button[type="submit"]');
