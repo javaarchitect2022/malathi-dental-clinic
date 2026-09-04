@@ -287,6 +287,21 @@ const CLINIC_WA_MESSAGE = "Hi, I'd like to book an appointment at Malathi Dental
     io.observe(contact);
   }
 
+  /* ---------- 9. Lock page zoom on touch devices ----------
+     Android respects the viewport meta above; iOS Safari ignores it,
+     so pinch (gesturestart) and double-tap zoom are blocked here.
+     Normal taps and scrolling are unaffected. */
+  function initNoZoom() {
+    if (!("ontouchstart" in window)) return;
+    document.addEventListener("gesturestart", (e) => e.preventDefault());
+    let lastTouch = 0;
+    document.addEventListener("touchend", (e) => {
+      const now = Date.now();
+      if (now - lastTouch < 300) e.preventDefault(); // double-tap zoom
+      lastTouch = now;
+    }, { passive: false });
+  }
+
   document.addEventListener("DOMContentLoaded", () => {
     applyContactLinks();
     initNav();
@@ -298,5 +313,6 @@ const CLINIC_WA_MESSAGE = "Hi, I'd like to book an appointment at Malathi Dental
     initCounters();
     initChips();
     initMobileBar();
+    initNoZoom();
   });
 })();
