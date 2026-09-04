@@ -321,7 +321,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   /* 1. Hero CTAs go full-width stacked — no overflow on 320px screens */
   .hero-cta .btn { flex: 1 1 100%; }
   .hero-banner-card { border-radius: 20px; }
-  .hero-banner-card img { aspect-ratio: 16 / 10; object-position: 70% center; }
+  .hero-banner-card img { aspect-ratio: auto; height: auto; object-position: center; }
   .hero-content-card { margin: 1rem 0.75rem 0; padding: 1.25rem; }
   /* 2. Rating badge stays compact so it doesn't cover the hero photo */
   .rating-badge { padding: 0.6rem 0.9rem; right: 10px; bottom: 10px; }
