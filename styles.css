@@ -99,6 +99,11 @@ a { color: var(--navy-700); }
 .hero-trust li:first-child { padding-left: 0; }
 .hero-media { position: relative; }
 .hero-media img { border-radius: 28px; box-shadow: var(--shadow-lg); width: 100%; border: 4px solid #fff; }
+/* Doctor portrait: fills the frame neatly whatever its exact size */
+.doctor-photo { aspect-ratio: 4 / 5; object-fit: cover; object-position: top center; max-height: 580px; background: var(--blue-soft); }
+.doctor-badge { position: absolute; top: 16px; left: 16px; background: rgba(255, 255, 255, 0.96); border: 1px solid var(--card-border); border-radius: 14px; padding: 0.55rem 0.95rem; box-shadow: var(--shadow); }
+.doctor-badge strong { display: block; font-family: var(--font-head); font-size: 0.95rem; color: var(--navy-900); }
+.doctor-badge span { font-size: 0.76rem; font-weight: 700; color: var(--orange-dark); }
 .rating-badge { position: absolute; right: 16px; bottom: 16px; background: var(--navy-900); color: #fff; border-radius: 16px; padding: 0.8rem 1.3rem; text-align: left; box-shadow: var(--shadow-lg); }
 .rating-badge strong { display: block; font-size: 1.5rem; }
 .rating-badge span { font-size: 0.85rem; opacity: 0.9; }
@@ -308,6 +313,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   /* 2. Rating badge stays compact so it doesn't cover the hero photo */
   .rating-badge { padding: 0.6rem 0.9rem; right: 10px; bottom: 10px; }
   .rating-badge strong { font-size: 1.15rem; }
+  .doctor-badge { top: 10px; left: 10px; padding: 0.45rem 0.75rem; }
   /* 3. 16px inputs stop iOS Safari auto-zooming on focus */
   .form-group input, .form-group select, .form-group textarea { font-size: 16px; }
   .stats-band-inner { grid-template-columns: repeat(2, 1fr); }

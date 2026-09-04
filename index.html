@@ -139,9 +139,11 @@
           </ul>
         </div>
         <div class="hero-media">
-          <!-- TO USE A REAL PHOTO: replace src with e.g. "images/signboard-photo.jpg".
-               Keep the same width/height attributes to avoid layout shift. -->
-          <img src="images/hero-board.svg" alt="Malathi Dental Clinic signboard — Dr. T. Malathi, B.D.S, specialist in single visit root canal treatment, phone 99004 01661" width="640" height="560" loading="eager" fetchpriority="high" />
+          <!-- DOCTOR PHOTO: save the photo as images/doctor.jpg (exact name).
+               If the file is missing, the clinic board graphic loads instead,
+               so the page never shows a broken image. -->
+          <img class="doctor-photo" src="images/doctor.jpg" onerror="this.onerror=null;this.src='images/hero-board.svg'" alt="Dr. T. Malathi, B.D.S — Root Canal Specialist at Malathi Dental Clinic" width="640" height="800" loading="eager" fetchpriority="high" />
+          <div class="doctor-badge"><strong>Dr. T. Malathi, B.D.S</strong><span>Root Canal Specialist</span></div>
           <div class="rating-badge" aria-label="Rated 4.9 out of 5 from Google patient reviews">
             <strong>4.9 ★★★★★</strong><span>Google patient reviews</span>
           </div>
