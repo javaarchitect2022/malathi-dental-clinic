@@ -250,6 +250,7 @@ const BACKUP_ENDPOINT = "https://formsubmit.co/ajax/malathi.thandapani@gmail.com
       const waFallback = document.getElementById("success-whatsapp");
       if (waFallback) waFallback.setAttribute("href", waURL);
       sendBackup(booking); // silent copy (no-op until BACKUP_ENDPOINT is set)
+      trackAdsEvent("appointment_request", GOOGLE_ADS_BOOKING_LABEL); // booking counted only after validation passes
       try { window.open(waURL, "_blank", "noopener"); } catch (err) { /* fallback link above covers this */ }
       success.hidden = false;
       success.scrollIntoView({ behavior: "smooth", block: "nearest" });
@@ -312,6 +313,35 @@ const BACKUP_ENDPOINT = "https://formsubmit.co/ajax/malathi.thandapani@gmail.com
     }, { passive: false });
   }
 
+  /* ---------- OPTIONAL: Google Ads conversion labels ----------
+     To count bookings/calls as Conversions in Google Ads (not just events),
+     create conversion actions (Tools → Conversions) and paste labels here,
+     e.g. "AW-956778592/AbC12-DeF34GhI56". Leave empty ("") to send
+     plain events only — safe, never blocks anything. */
+  const GOOGLE_ADS_BOOKING_LABEL = "";
+  const GOOGLE_ADS_CALL_LABEL = "";
+  const GOOGLE_ADS_WHATSAPP_LABEL = "";
+
+  /* ---------- 10. Google Ads event tracking ----------
+     Fires on real patient actions. Guarded so the site works
+     identically with ad-blockers or if gtag fails to load. */
+  function trackAdsEvent(eventName, label) {
+    try {
+      if (typeof gtag !== "function") return;
+      if (label) gtag("event", "conversion", { send_to: label });
+      else gtag("event", eventName);
+    } catch (err) { /* tracking must never break booking */ }
+  }
+
+  function initAdsTracking() {
+    document.querySelectorAll("[data-call-link]").forEach((a) => {
+      a.addEventListener("click", () => trackAdsEvent("call_click", GOOGLE_ADS_CALL_LABEL));
+    });
+    document.querySelectorAll("[data-whatsapp-link],[data-wa-enquire]").forEach((a) => {
+      a.addEventListener("click", () => trackAdsEvent("whatsapp_click", GOOGLE_ADS_WHATSAPP_LABEL));
+    });
+  }
+
   document.addEventListener("DOMContentLoaded", () => {
     applyContactLinks();
     initNav();
@@ -323,5 +353,6 @@ const BACKUP_ENDPOINT = "https://formsubmit.co/ajax/malathi.thandapani@gmail.com
     initEnquireLinks();
     initMobileBar();
     initNoZoom();
+    initAdsTracking();
   });
 })();
