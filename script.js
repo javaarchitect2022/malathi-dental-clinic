@@ -93,7 +93,7 @@ const BACKUP_ENDPOINT = "https://formsubmit.co/ajax/malathi.thandapani@gmail.com
 
   /* ---------- 4. Reveal on scroll ---------- */
   function initReveal() {
-    const els = document.querySelectorAll(".service-card, .review-card, .cream-card, .blue-card, .form-card, .speciality-banner, .chip, .steps li, .faq, .stats-band-inner > div");
+    const els = document.querySelectorAll(".service-group, .rct-card, .cream-card, .blue-card, .form-card, .loc-card, .steps li, .faq, .stats-band-inner > div");
     els.forEach((el) => el.classList.add("reveal"));
     if (!("IntersectionObserver" in window)) { els.forEach((el) => el.classList.add("in")); return; }
     const io = new IntersectionObserver((entries) => {
@@ -274,48 +274,19 @@ const BACKUP_ENDPOINT = "https://formsubmit.co/ajax/malathi.thandapani@gmail.com
     if (y) y.textContent = String(new Date().getFullYear());
   }
 
-  /* ---------- 6. Animated trust-band counters (honest figures only) ---------- */
-  function initCounters() {
-    const els = document.querySelectorAll("[data-count]");
-    if (!els.length) return;
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const animate = (el) => {
-      const target = parseFloat(el.dataset.count);
-      const decimals = parseInt(el.dataset.decimals || "0", 10);
-      if (reduced || !isFinite(target)) { el.textContent = target.toFixed(decimals); return; }
-      const dur = 1200;
-      const t0 = performance.now();
-      const tick = (t) => {
-        const p = Math.min((t - t0) / dur, 1);
-        const eased = 1 - Math.pow(1 - p, 3);
-        el.textContent = (target * eased).toFixed(decimals);
-        if (p < 1) requestAnimationFrame(tick);
-      };
-      requestAnimationFrame(tick);
-    };
-    if (!("IntersectionObserver" in window)) { els.forEach(animate); return; }
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach((e) => { if (e.isIntersecting) { animate(e.target); io.unobserve(e.target); } });
-    }, { threshold: 0.4 });
-    els.forEach((el) => io.observe(el));
-  }
-
-  /* ---------- 7. Symptom chips → pre-fill treatment in booking form ---------- */
-  function initChips() {
-    const select = document.getElementById("f-service");
-    if (!select) return;
-    document.querySelectorAll(".chip[data-treatment]").forEach((chip) => {
-      chip.addEventListener("click", () => {
-        const want = chip.dataset.treatment;
-        Array.from(select.options).forEach((o) => {
-          if (o.text.trim() === want) select.selectedIndex = o.index;
-        });
-        setError(select, "");
-      });
+  /* ---------- 6. Service "Enquire on WhatsApp" links ----------
+     Each [data-wa-enquire] link opens WhatsApp with its own message,
+     built from the single CLINIC_WHATSAPP number above. */
+  function initEnquireLinks() {
+    const base = "https://wa.me/" + CLINIC_WHATSAPP.replace(/\D/g, "");
+    document.querySelectorAll("[data-wa-enquire]").forEach((a) => {
+      a.setAttribute("href", base + "?text=" + encodeURIComponent(a.getAttribute("data-wa-enquire")));
+      a.setAttribute("target", "_blank");
+      a.setAttribute("rel", "noopener");
     });
   }
 
-  /* ---------- 8. Sticky mobile bar: hide while booking form is visible ---------- */
+  /* ---------- 7. Sticky mobile bar: hide while booking form is visible ---------- */
   function initMobileBar() {
     const bar = document.getElementById("mobile-bar");
     const contact = document.getElementById("contact");
@@ -349,8 +320,7 @@ const BACKUP_ENDPOINT = "https://formsubmit.co/ajax/malathi.thandapani@gmail.com
     initBookingForm();
     initYear();
     initOpenBadge();
-    initCounters();
-    initChips();
+    initEnquireLinks();
     initMobileBar();
     initNoZoom();
   });
