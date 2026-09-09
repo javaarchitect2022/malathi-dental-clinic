@@ -49,11 +49,12 @@ const GOOGLE_ADS_WHATSAPP_LABEL = "";
     const isOpen = day !== 0 && mins >= openMins && mins < closeMins;
 
     if (isOpen) {
-      badge.innerHTML = '<span class="status-dot"></span> Open Now · Closes 7:30 PM';
+      badge.innerHTML = '<span class="status-dot"></span> <span class="status-long">Open Now</span><span class="status-short">Open</span> · Closes 7:30 PM';
       badge.className = "live-status open";
     } else {
-      const nextText = day === 0 ? "Closed Today (Sunday) · Opens Mon 9:30 AM" : "Closed Now · Opens 9:30 AM";
-      badge.innerHTML = '<span class="status-dot"></span> ' + nextText;
+      const longText = day === 0 ? "Closed Today (Sunday) · Opens Mon 9:30 AM" : "Closed Now · Opens 9:30 AM";
+      const shortText = day === 0 ? "Closed · Opens Mon 9:30 AM" : "Closed · Opens 9:30 AM";
+      badge.innerHTML = '<span class="status-dot"></span> <span class="status-long">' + longText + '</span><span class="status-short">' + shortText + '</span>';
       badge.className = "live-status closed";
     }
   }
