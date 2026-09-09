@@ -1,6 +1,6 @@
 /* ============================================================
    MALATHI DENTAL CLINIC — script.js
-   World-Class Interactive Platform Logic (Zero Dependencies)
+   Interactive Patient Concierge Logic (Zero Dependencies)
    ============================================================ */
 
 const CLINIC_PHONE_DISPLAY = "99004 01661";
