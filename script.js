@@ -1,40 +1,25 @@
 /* ============================================================
-   MALATHI DENTAL CLINIC — script.js (vanilla JS, no deps)
-   ------------------------------------------------------------
-   ★ UPDATE PHONE / WHATSAPP IN ONE PLACE ★
-   ------------------------------------------------------------
-   Display : 99004 01661
-   tel:    : tel:+919900401661  (tapping calls the clinic)
-   wa.me   : https://wa.me/919900401661 (opens WhatsApp chat)
+   MALATHI DENTAL CLINIC — script.js
+   World-Class Interactive Platform Logic (Zero Dependencies)
    ============================================================ */
+
 const CLINIC_PHONE_DISPLAY = "99004 01661";
 const CLINIC_PHONE_TEL = "+919900401661";
-const CLINIC_WHATSAPP = "919900401661"; // country code + number, no "+" or spaces
-const CLINIC_WA_MESSAGE = "Hi, I'd like to book an appointment at Malathi Dental Clinic";
+const CLINIC_WHATSAPP = "919900401661"; // 10 digits with 91 country code, no + or spaces
+const CLINIC_WA_MESSAGE = "Hi, I would like to book an appointment at Malathi Dental Clinic";
 
-/* ---------- OPTIONAL: invisible booking backup (no server needed) ----------
-   Leave empty ("") to keep WhatsApp-only booking (current behaviour).
-   To ALSO save every booking automatically, paste ONE endpoint here:
-
-   Option A — Email backup (2 min, free, no signup):
-     1. Put "https://formsubmit.co/ajax/YOU@EXAMPLE.COM" below (your email).
-     2. Submit one test booking and click the activation mail FormSubmit sends.
-     3. Every later booking lands in your inbox AND still opens WhatsApp.
-
-   Option B — Google Sheet backup (10 min, free):
-     1. Create a Sheet with header row: timestamp,name,phone,email,service,clinic,date,time,message
-     2. Extensions → Apps Script, paste a doPost(e) that appends the JSON row, Deploy → Web app (access: Anyone).
-     3. Paste the /exec URL below.
-
-   The backup fires silently and NEVER blocks WhatsApp — if it fails,
-   the patient still books normally and you lose nothing. */
+// Silent FormSubmit backup endpoint (preserves all booking inquiries reliably)
 const BACKUP_ENDPOINT = "https://formsubmit.co/ajax/malathi.thandapani@gmail.com";
+
+// Google Ads conversion labels (fill when conversion actions are created)
+const GOOGLE_ADS_BOOKING_LABEL = "";
+const GOOGLE_ADS_CALL_LABEL = "";
+const GOOGLE_ADS_WHATSAPP_LABEL = "";
 
 (function () {
   "use strict";
 
-  /* ---------- 1. Apply phone / WhatsApp links everywhere ---------- */
-  // All <a data-call-link> → tel: | all <a data-whatsapp-link> → wa.me/...
+  /* ---------- 1. Apply Dynamic Contact Links ---------- */
   function applyContactLinks() {
     const telHref = "tel:" + CLINIC_PHONE_TEL.replace(/\s+/g, "");
     const waHref =
@@ -50,126 +35,200 @@ const BACKUP_ENDPOINT = "https://formsubmit.co/ajax/malathi.thandapani@gmail.com
     });
   }
 
-  /* ---------- 2. Mobile nav ---------- */
+  /* ---------- 2. Live Clinic Hours Indicator ---------- */
+  function initOpenBadge() {
+    const badge = document.getElementById("live-status");
+    if (!badge) return;
+
+    const now = new Date();
+    const day = now.getDay(); // 0 = Sunday
+    const mins = now.getHours() * 60 + now.getMinutes();
+    const openMins = 9 * 60 + 30;  // 9:30 AM
+    const closeMins = 19 * 60 + 30; // 7:30 PM
+
+    const isOpen = day !== 0 && mins >= openMins && mins < closeMins;
+
+    if (isOpen) {
+      badge.innerHTML = '<span class="status-dot"></span> Open Now · Closes 7:30 PM';
+      badge.className = "live-status open";
+    } else {
+      const nextText = day === 0 ? "Closed Today (Sunday) · Opens Mon 9:30 AM" : "Closed Now · Opens 9:30 AM";
+      badge.innerHTML = '<span class="status-dot"></span> ' + nextText;
+      badge.className = "live-status closed";
+    }
+  }
+
+  /* ---------- 3. Mobile Navigation Drawer ---------- */
   function initNav() {
     const toggle = document.getElementById("nav-toggle");
     const nav = document.getElementById("main-nav");
     if (!toggle || !nav) return;
+
     function setOpen(open) {
       nav.classList.toggle("open", open);
       toggle.setAttribute("aria-expanded", String(open));
-      toggle.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+      toggle.setAttribute("aria-label", open ? "Close navigation" : "Open navigation");
     }
+
     toggle.addEventListener("click", () => setOpen(!nav.classList.contains("open")));
-    // Close on Escape for keyboard users
+
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape" && nav.classList.contains("open")) {
         setOpen(false);
         toggle.focus();
       }
     });
+
     nav.querySelectorAll("a").forEach((link) => {
       link.addEventListener("click", () => setOpen(false));
     });
   }
 
-  /* ---------- 3. Header shadow + scrollspy + floating buttons ---------- */
+  /* ---------- 4. Header Shadow, ScrollSpy & Floating FABs ---------- */
   function initScrollSpy() {
     const header = document.getElementById("site-header");
+    const fabs = document.getElementById("fab-stack");
     const links = Array.from(document.querySelectorAll(".nav-link"));
-    const sections = links.map((l) => document.querySelector(l.getAttribute("href"))).filter(Boolean);
+    const sections = links
+      .map((l) => document.querySelector(l.getAttribute("href")))
+      .filter(Boolean);
+
     function onScroll() {
-      if (header) header.style.boxShadow = window.scrollY > 8 ? "0 4px 20px rgba(11,47,74,.12)" : "none";
-      const fabs = document.getElementById("fab-stack");
-      if (fabs) fabs.classList.toggle("visible", window.scrollY > 400);
-      const pos = window.scrollY + 160;
-      let current = sections[0];
-      sections.forEach((s) => { if (s.offsetTop <= pos) current = s; });
-      links.forEach((l) => l.classList.toggle("active", current && l.getAttribute("href") === "#" + current.id));
+      const scrollY = window.scrollY;
+      if (header) {
+        header.classList.toggle("scrolled", scrollY > 10);
+      }
+      if (fabs) {
+        fabs.classList.toggle("visible", scrollY > 350);
+      }
+
+      // Highlight active nav item
+      const pos = scrollY + 160;
+      let currentSection = null;
+      sections.forEach((s) => {
+        if (s.offsetTop <= pos) currentSection = s;
+      });
+
+      links.forEach((l) => {
+        const targetId = l.getAttribute("href");
+        const isActive = currentSection && targetId === "#" + currentSection.id;
+        l.classList.toggle("active", Boolean(isActive));
+      });
     }
+
     window.addEventListener("scroll", onScroll, { passive: true });
     onScroll();
   }
 
-  /* ---------- 4. Reveal on scroll ---------- */
-  function initReveal() {
-    const els = document.querySelectorAll(".service-group, .rct-card, .cream-card, .blue-card, .form-card, .loc-card, .steps li, .faq, .stats-band-inner > div");
-    els.forEach((el) => el.classList.add("reveal"));
-    if (!("IntersectionObserver" in window)) { els.forEach((el) => el.classList.add("in")); return; }
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } });
-    }, { threshold: 0.12 });
-    els.forEach((el) => io.observe(el));
+  /* ---------- 5. Interactive Patient Triage Integration ---------- */
+  function initTriage() {
+    const cards = document.querySelectorAll("[data-triage-service]");
+    const serviceSelect = document.getElementById("f-service");
+    const bookingSection = document.getElementById("booking-section");
+
+    cards.forEach((card) => {
+      card.addEventListener("click", (e) => {
+        e.preventDefault();
+        const serviceName = card.getAttribute("data-triage-service");
+        if (serviceSelect && serviceName) {
+          serviceSelect.value = serviceName;
+          serviceSelect.dispatchEvent(new Event("change"));
+        }
+        if (bookingSection) {
+          bookingSection.scrollIntoView({ behavior: "smooth", block: "start" });
+          setTimeout(() => {
+            const nameInput = document.getElementById("f-name");
+            if (nameInput) nameInput.focus();
+          }, 450);
+        }
+      });
+    });
   }
 
-  /* ---------- 5. Booking form ---------- */
+  /* ---------- 6. Two Clinic Locations Tab Switcher ---------- */
+  function initBranchTabs() {
+    const tabBtns = document.querySelectorAll(".branch-tab-btn");
+    const tabPanes = document.querySelectorAll(".branch-pane");
+    const clinicSelect = document.getElementById("f-clinic");
+
+    tabBtns.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const targetId = btn.getAttribute("data-branch-target");
+
+        tabBtns.forEach((b) => b.classList.remove("active"));
+        tabPanes.forEach((p) => p.classList.remove("active"));
+
+        btn.classList.add("active");
+        const targetPane = document.getElementById(targetId);
+        if (targetPane) targetPane.classList.add("active");
+
+        // Sync clinic dropdown if relevant
+        if (clinicSelect) {
+          if (targetId === "branch-maruthi") {
+            clinicSelect.value = "Clinic 1 — Maruthi Layout";
+          } else if (targetId === "branch-hosa") {
+            clinicSelect.value = "Clinic 2 — Hosa Road / Gregorian Nagar";
+          }
+        }
+      });
+    });
+  }
+
+  /* ---------- 7. Local ISO Date Helper ---------- */
+  function getLocalISODate(d = new Date()) {
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    return `${y}-${m}-${day}`;
+  }
+
+  /* ---------- 8. High-Converting Booking Engine ---------- */
   function setError(input, message) {
     const group = input.closest(".form-group");
-    const err = group ? group.querySelector(".error") : null;
+    if (!group) return;
+    const err = group.querySelector(".form-error");
     if (err) err.textContent = message || "";
-    if (group) group.classList.toggle("invalid", Boolean(message));
+    group.classList.toggle("invalid", Boolean(message));
     if (message) input.setAttribute("aria-invalid", "true");
     else input.removeAttribute("aria-invalid");
   }
 
-  // Local (device) date as YYYY-MM-DD — unlike toISOString() this does
-  // not shift the day for IST (+05:30) near midnight.
-  function localISODate(d) {
-    const y = d.getFullYear();
-    const m = String(d.getMonth() + 1).padStart(2, "0");
-    const day = String(d.getDate()).padStart(2, "0");
-    return y + "-" + m + "-" + day;
-  }
-
-  /* Clinic hours: Mon–Sat 9:30 AM – 7:30 PM, Sunday closed.
-     Drives the "Open now / Closed" badge in the topbar. */
-  function initOpenBadge() {
-    const badge = document.getElementById("open-badge");
-    if (!badge) return;
-    const now = new Date();
-    const day = now.getDay(); // 0 = Sunday
-    const mins = now.getHours() * 60 + now.getMinutes();
-    const open = day !== 0 && mins >= 9 * 60 + 30 && mins < 19 * 60 + 30;
-    badge.textContent = open ? "● Open now" : "○ Closed · opens 9:30 AM (Mon–Sat)";
-    badge.classList.toggle("open", open);
-    badge.classList.toggle("closed", !open);
-  }
-
-  /* Silent backup sender — fire-and-forget, never blocks booking. */
-  function sendBackup(booking) {
+  function sendBackupSilent(booking) {
     if (!BACKUP_ENDPOINT) return;
     try {
-      const body = JSON.stringify(booking);
+      const payload = JSON.stringify(booking);
       if (navigator.sendBeacon) {
-        navigator.sendBeacon(BACKUP_ENDPOINT, new Blob([body], { type: "application/json" }));
+        navigator.sendBeacon(BACKUP_ENDPOINT, new Blob([payload], { type: "application/json" }));
       } else {
         fetch(BACKUP_ENDPOINT, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: body,
+          body: payload,
           keepalive: true,
-        }).catch(function () { /* backup must never break booking */ });
+        }).catch(() => {});
       }
-    } catch (err) { /* backup must never break booking */ }
+    } catch (_) {}
   }
 
   function initBookingForm() {
     const form = document.getElementById("booking-form");
     if (!form) return;
+
     const name = document.getElementById("f-name");
     const phone = document.getElementById("f-phone");
     const email = document.getElementById("f-email");
     const service = document.getElementById("f-service");
     const clinic = document.getElementById("f-clinic");
     const date = document.getElementById("f-date");
-    const time = document.getElementById("f-time");
-    const success = document.getElementById("form-success");
+    const note = document.getElementById("f-msg");
+    const successCard = document.getElementById("form-success");
 
-    // No Sunday bookings (Sunday Holiday) + no past dates (local date!)
-    const isoToday = localISODate(new Date());
-    date.setAttribute("min", isoToday);
+    // Min date = today (local IST)
+    const todayISO = getLocalISODate();
+    if (date) date.setAttribute("min", todayISO);
 
-    [name, phone, email, service, clinic, date, time].forEach((input) => {
+    // Clear errors on input
+    [name, phone, email, service, clinic, date].forEach((input) => {
       if (!input) return;
       input.addEventListener("input", () => setError(input, ""));
       input.addEventListener("change", () => setError(input, ""));
@@ -177,182 +236,195 @@ const BACKUP_ENDPOINT = "https://formsubmit.co/ajax/malathi.thandapani@gmail.com
 
     form.addEventListener("submit", (e) => {
       e.preventDefault();
-      let ok = true;
+      let isValid = true;
 
-      if (!name.value.trim() || name.value.trim().length < 2) { setError(name, "Please enter the patient name."); ok = false; }
+      // Name validation
+      if (!name.value.trim() || name.value.trim().length < 2) {
+        setError(name, "Please enter the patient's name.");
+        isValid = false;
+      }
+
+      // 10-digit mobile number validation
       const digits = phone.value.replace(/\D/g, "").replace(/^91(?=\d{10}$)/, "");
-      if (digits.length !== 10) { setError(phone, "Please enter a valid 10-digit mobile number."); ok = false; }
-      if (email.value.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim())) { setError(email, "Please enter a valid email address."); ok = false; }
-      if (!service.value) { setError(service, "Please select a treatment."); ok = false; }
-      if (!clinic.value) { setError(clinic, "Please select a preferred clinic."); ok = false; }
-      if (!date.value) { setError(date, "Please pick a date."); ok = false; }
-      else if (date.value < isoToday) { setError(date, "Date cannot be in the past."); ok = false; }
-      else if (new Date(date.value + "T00:00:00").getDay() === 0) { setError(date, "Clinic is closed on Sundays — please pick another day."); ok = false; }
-      if (!time.value) { setError(time, "Please pick a time slot."); ok = false; }
+      if (digits.length !== 10) {
+        setError(phone, "Please enter a valid 10-digit Indian mobile number.");
+        isValid = false;
+      }
 
-      if (!ok) {
+      // Email validation (optional)
+      if (email && email.value.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim())) {
+        setError(email, "Please provide a valid email address.");
+        isValid = false;
+      }
+
+      // Treatment validation
+      if (!service.value) {
+        setError(service, "Please choose a treatment or consultation.");
+        isValid = false;
+      }
+
+      // Clinic branch validation
+      if (!clinic.value) {
+        setError(clinic, "Please select your preferred clinic branch.");
+        isValid = false;
+      }
+
+      // Date validation (not past, not Sunday)
+      if (!date.value) {
+        setError(date, "Please choose your preferred appointment date.");
+        isValid = false;
+      } else if (date.value < todayISO) {
+        setError(date, "Appointment date cannot be in the past.");
+        isValid = false;
+      } else {
+        const selectedDate = new Date(date.value + "T00:00:00");
+        if (selectedDate.getDay() === 0) {
+          setError(date, "Our clinics are closed on Sundays. Please select Mon–Sat.");
+          isValid = false;
+        }
+      }
+
+      // Time slot
+      const selectedTimeChip = form.querySelector('input[name="time_slot"]:checked');
+      const timeVal = selectedTimeChip ? selectedTimeChip.value : "Anytime during clinic hours";
+
+      if (!isValid) {
         const firstInvalid = form.querySelector(".form-group.invalid input, .form-group.invalid select");
         if (firstInvalid) firstInvalid.focus();
         return;
       }
 
-      const booking = {
+      const bookingData = {
         name: name.value.trim(),
         phone: phone.value.trim(),
-        email: email.value.trim(),
+        email: email ? email.value.trim() : "",
         service: service.value,
         clinic: clinic.value,
         date: date.value,
-        time: time.value,
-        message: document.getElementById("f-msg").value.trim(),
-        createdAt: new Date().toISOString(),
+        time: timeVal,
+        message: note ? note.value.trim() : "",
+        submittedAt: new Date().toISOString(),
       };
 
-      /* ======================================================
-         ★ CONNECT A REAL BACKEND / BOOKING API HERE ★
-         Front-end only right now (shows confirmation below).
-         To go live, POST the `booking` object, e.g.:
+      // Format WhatsApp Message
+      const waText =
+        "✨ *New Appointment Request — Malathi Dental Clinic*\n\n" +
+        "👤 *Patient:* " + bookingData.name + "\n" +
+        "📱 *Phone:* " + bookingData.phone + "\n" +
+        "🦷 *Treatment:* " + bookingData.service + "\n" +
+        "📍 *Clinic:* " + bookingData.clinic + "\n" +
+        "📅 *Date & Slot:* " + bookingData.date + " (" + bookingData.time + ")" +
+        (bookingData.email ? "\n📧 *Email:* " + bookingData.email : "") +
+        (bookingData.message ? "\n📝 *Note:* " + bookingData.message : "") +
+        "\n\n_Sent via malathidental.com_";
 
-           await fetch("https://your-api.com/api/appointments", {
-             method: "POST",
-             headers: { "Content-Type": "application/json" },
-             body: JSON.stringify(booking)
-           });
+      const waURL =
+        "https://wa.me/" +
+        CLINIC_WHATSAPP.replace(/\D/g, "") +
+        "?text=" +
+        encodeURIComponent(waText);
 
-         Or forward to the clinic on WhatsApp:
-           const text = encodeURIComponent(
-             `New appointment: ${booking.name}, ${booking.phone}, ` +
-             `${booking.service} @ ${booking.clinic} on ${booking.date} (${booking.time})`
-           );
-           window.open(`https://wa.me/${CLINIC_WHATSAPP}?text=${text}`, "_blank");
-         ====================================================== */
-      // Booking confirmed client-side (no backend yet — see note below).
-      handleBookingSubmit(booking);
+      // 1. Fire silent backup
+      sendBackupSilent(bookingData);
+
+      // 2. Fire Google Ads conversion tracking
+      trackAdsEvent("appointment_request", GOOGLE_ADS_BOOKING_LABEL);
+
+      // 3. Open WhatsApp directly
+      try {
+        window.open(waURL, "_blank", "noopener");
+      } catch (_) {}
+
+      // 4. Update Success View
+      document.getElementById("success-patient-name").textContent =
+        bookingData.name.split(" ")[0] || "Friend";
+      document.getElementById("success-details-summary").textContent =
+        `${bookingData.service} at ${bookingData.clinic} on ${bookingData.date} (${bookingData.time})`;
+
+      const fallbackWaLink = document.getElementById("success-wa-link");
+      if (fallbackWaLink) fallbackWaLink.setAttribute("href", waURL);
+
+      form.style.display = "none";
+      if (successCard) {
+        successCard.hidden = false;
+        successCard.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      }
     });
 
-    function handleBookingSubmit(booking) {
-      document.getElementById("success-name").textContent = booking.name.split(" ")[0] || "friend";
-      document.getElementById("success-slot").textContent =
-        booking.service + " @ " + booking.clinic + " on " + booking.date + " · " + booking.time;
-      // Direct send: open the clinic's WhatsApp with the full booking
-      // pre-filled — the patient just hits send. Runs in the submit
-      // (user-gesture) handler so popup blockers allow it.
-      const raw =
-        "Hi Malathi Dental Clinic! I'd like to confirm my appointment:\n" +
-        "Name: " + booking.name +
-        "\nPhone: " + booking.phone +
-        "\nTreatment: " + booking.service +
-        "\nClinic: " + booking.clinic +
-        "\nPreferred: " + booking.date + " (" + booking.time + ")" +
-        (booking.email ? "\nEmail: " + booking.email : "") +
-        (booking.message ? "\nNote: " + booking.message : "");
-      const waURL = "https://wa.me/" + CLINIC_WHATSAPP.replace(/\D/g, "") + "?text=" + encodeURIComponent(raw);
-      const waFallback = document.getElementById("success-whatsapp");
-      if (waFallback) waFallback.setAttribute("href", waURL);
-      sendBackup(booking); // silent copy (no-op until BACKUP_ENDPOINT is set)
-      trackAdsEvent("appointment_request", GOOGLE_ADS_BOOKING_LABEL); // booking counted only after validation passes
-      try { window.open(waURL, "_blank", "noopener"); } catch (err) { /* fallback link above covers this */ }
-      success.hidden = false;
-      success.scrollIntoView({ behavior: "smooth", block: "nearest" });
-      const submitBtn = form.querySelector('button[type="submit"]');
-      submitBtn.textContent = "Request Sent ✓";
-      submitBtn.disabled = true; // prevent accidental double-booking
+    // Reset Form Button
+    const resetBtn = document.getElementById("booking-reset-btn");
+    if (resetBtn) {
+      resetBtn.addEventListener("click", () => {
+        form.reset();
+        form.style.display = "block";
+        if (successCard) successCard.hidden = true;
+        name.focus();
+      });
     }
-
-    const resetBtn = document.getElementById("form-reset");
-    if (resetBtn) resetBtn.addEventListener("click", () => {
-      form.reset();
-      success.hidden = true;
-      const submitBtn = form.querySelector('button[type="submit"]');
-      submitBtn.textContent = "Request Appointment";
-      submitBtn.disabled = false;
-      name.focus();
-    });
   }
 
-  function initYear() {
-    const y = document.getElementById("year");
-    if (y) y.textContent = String(new Date().getFullYear());
-  }
-
-  /* ---------- 6. Service "Enquire on WhatsApp" links ----------
-     Each [data-wa-enquire] link opens WhatsApp with its own message,
-     built from the single CLINIC_WHATSAPP number above. */
+  /* ---------- 9. WhatsApp Enquire Links on Service Cards ---------- */
   function initEnquireLinks() {
     const base = "https://wa.me/" + CLINIC_WHATSAPP.replace(/\D/g, "");
     document.querySelectorAll("[data-wa-enquire]").forEach((a) => {
-      a.setAttribute("href", base + "?text=" + encodeURIComponent(a.getAttribute("data-wa-enquire")));
+      const msg = a.getAttribute("data-wa-enquire");
+      a.setAttribute("href", base + "?text=" + encodeURIComponent(msg));
       a.setAttribute("target", "_blank");
       a.setAttribute("rel", "noopener");
     });
   }
 
-  /* ---------- 7. Sticky mobile bar: hide while booking form is visible ---------- */
+  /* ---------- 10. Sticky Mobile Bottom Bar Auto-Hide ---------- */
   function initMobileBar() {
     const bar = document.getElementById("mobile-bar");
-    const contact = document.getElementById("contact");
-    if (!bar || !contact || !("IntersectionObserver" in window)) return;
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach((e) => bar.classList.toggle("hidden", e.isIntersecting));
-    }, { threshold: 0.08 });
-    io.observe(contact);
+    const bookingSec = document.getElementById("booking-section");
+    if (!bar || !bookingSec || !("IntersectionObserver" in window)) return;
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => bar.classList.toggle("hidden", e.isIntersecting));
+      },
+      { threshold: 0.1 }
+    );
+    io.observe(bookingSec);
   }
 
-  /* ---------- 9. Lock page zoom on touch devices ----------
-     Android respects the viewport meta above; iOS Safari ignores it,
-     so pinch (gesturestart) and double-tap zoom are blocked here.
-     Normal taps and scrolling are unaffected. */
-  function initNoZoom() {
-    if (!("ontouchstart" in window)) return;
-    document.addEventListener("gesturestart", (e) => e.preventDefault());
-    let lastTouch = 0;
-    document.addEventListener("touchend", (e) => {
-      const now = Date.now();
-      if (now - lastTouch < 300) e.preventDefault(); // double-tap zoom
-      lastTouch = now;
-    }, { passive: false });
-  }
-
-  /* ---------- OPTIONAL: Google Ads conversion labels ----------
-     To count bookings/calls as Conversions in Google Ads (not just events),
-     create conversion actions (Tools → Conversions) and paste labels here,
-     e.g. "AW-956778592/AbC12-DeF34GhI56". Leave empty ("") to send
-     plain events only — safe, never blocks anything. */
-  const GOOGLE_ADS_BOOKING_LABEL = "";
-  const GOOGLE_ADS_CALL_LABEL = "";
-  const GOOGLE_ADS_WHATSAPP_LABEL = "";
-
-  /* ---------- 10. Google Ads event tracking ----------
-     Fires on real patient actions. Guarded so the site works
-     identically with ad-blockers or if gtag fails to load. */
+  /* ---------- 11. Google Ads Event Tracking ---------- */
   function trackAdsEvent(eventName, label) {
     try {
       if (typeof gtag !== "function") return;
       if (label) gtag("event", "conversion", { send_to: label });
       else gtag("event", eventName);
-    } catch (err) { /* tracking must never break booking */ }
+    } catch (_) {}
   }
 
   function initAdsTracking() {
     document.querySelectorAll("[data-call-link]").forEach((a) => {
       a.addEventListener("click", () => trackAdsEvent("call_click", GOOGLE_ADS_CALL_LABEL));
     });
-    document.querySelectorAll("[data-whatsapp-link],[data-wa-enquire]").forEach((a) => {
+    document.querySelectorAll("[data-whatsapp-link], [data-wa-enquire]").forEach((a) => {
       a.addEventListener("click", () => trackAdsEvent("whatsapp_click", GOOGLE_ADS_WHATSAPP_LABEL));
     });
   }
 
+  /* ---------- 12. Dynamic Year ---------- */
+  function initYear() {
+    const y = document.getElementById("year");
+    if (y) y.textContent = String(new Date().getFullYear());
+  }
+
+  /* ---------- DOMContentLoaded Bootstrap ---------- */
   document.addEventListener("DOMContentLoaded", () => {
     applyContactLinks();
+    initOpenBadge();
     initNav();
     initScrollSpy();
-    initReveal();
+    initTriage();
+    initBranchTabs();
     initBookingForm();
-    initYear();
-    initOpenBadge();
     initEnquireLinks();
     initMobileBar();
-    initNoZoom();
     initAdsTracking();
+    initYear();
   });
 })();
